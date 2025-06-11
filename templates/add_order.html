@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Order - Order Management System{% endblock %}
+{% block page_title %}Add New Order{% endblock %}
+{% block description %}Create a new order with all the necessary details{% endblock %}
+
+{% block content %}
+<div class="p-6">
+    <div class="max-w-2xl mx-auto">
+        <form method="POST" class="space-y-6">
+            <!-- Order Details Section -->
+            <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-box mr-2 text-primary-600"></i>
+                    Order Details
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="num_items" class="block text-sm font-medium text-gray-700 mb-2">
+                            Number of Items <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="number" 
+                                   id="num_items" 
+                                   name="num_items" 
+                                   required 
+                                   min="1"
+                                   class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                                   placeholder="Enter number of items">
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <i class="fas fa-hashtag text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="delivery_date" class="block text-sm font-medium text-gray-700 mb-2">
+                            Delivery Date <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="date" 
+                                   id="delivery_date" 
+                                   name="delivery_date" 
+                                   required
+                                   class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <i class="fas fa-calendar text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sender Information Section -->
+            <div class="bg-blue-50 rounded-lg p-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-user mr-2 text-blue-600"></i>
+                    Sender Information
+                </h3>
+                
+                <div>
+                    <label for="sender_name" class="block text-sm font-medium text-gray-700 mb-2">
+                        Sender Name <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="text" 
+                               id="sender_name" 
+                               name="sender_name" 
+                               required
+                               class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                               placeholder="Enter sender's full name">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <i class="fas fa-user text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipient Information Section -->
+            <div class="bg-green-50 rounded-lg p-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-user-check mr-2 text-green-600"></i>
+                    Recipient Information
+                </h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label for="recipient_name" class="block text-sm font-medium text-gray-700 mb-2">
+                            Recipient Name <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" 
+                                   id="recipient_name" 
+                                   name="recipient_name" 
+                                   required
+                                   class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                                   placeholder="Enter recipient's full name">
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="recipient_address" class="block text-sm font-medium text-gray-700 mb-2">
+                            Recipient Address <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <textarea id="recipient_address" 
+                                      name="recipient_address" 
+                                      rows="3" 
+                                      required
+                                      class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                                      placeholder="Enter complete delivery address including street, city, state, and postal code"></textarea>
+                            <div class="absolute top-3 right-3 pointer-events-none">
+                                <i class="fas fa-map-marker-alt text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Information Section -->
+            <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-cog mr-2 text-gray-600"></i>
+                    System Information
+                </h3>
+                
+                <div>
+                    <label for="performed_by" class="block text-sm font-medium text-gray-700 mb-2">
+                        Performed By
+                    </label>
+                    <div class="relative">
+                        <input type="text" 
+                               id="performed_by" 
+                               name="performed_by" 
+                               class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                               placeholder="Your name (optional for logging purposes)">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <i class="fas fa-user-tag text-gray-400"></i>
+                        </div>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-500">This will be recorded in the action logs</p>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+                <button type="submit" 
+                        class="flex-1 sm:flex-none inline-flex justify-center items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200 shadow-sm">
+                    <i class="fas fa-plus mr-2"></i>
+                    Create Order
+                </button>
+                
+                <a href="{{ url_for('index') }}" 
+                   class="flex-1 sm:flex-none inline-flex justify-center items-center px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
+                    <i class="fas fa-times mr-2"></i>
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Set minimum date to today
+    document.getElementById('delivery_date').min = new Date().toISOString().split('T')[0];
+    
+    // Form validation feedback
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const submitBtn = document.querySelector('button[type="submit"]');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Order...';
+        submitBtn.disabled = true;
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Action Logs - Order Management System{% endblock %}
+{% block page_title %}Action Logs{% endblock %}
+{% block description %}Complete audit trail of all system activities{% endblock %}
+
+{% block content %}
+<div class="p-6">
+    <!-- Stats and Filters -->
+    <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-4 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-purple-100 text-sm font-medium">Total Actions</p>
+                    <p class="text-2xl font-bold">{{ logs|length }}</p>
+                </div>
+                <div class="bg-purple-400 bg-opacity-30 rounded-full p-2">
+                    <i class="fas fa-history text-lg"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-4 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-green-100 text-sm font-medium">Created</p>
+                    <p class="text-2xl font-bold">{{ logs|selectattr('action_type', 'equalto', 'Created')|list|length }}</p>
+                </div>
+                <div class="bg-green-400 bg-opacity-30 rounded-full p-2">
+                    <i class="fas fa-plus text-lg"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-4 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-blue-100 text-sm font-medium">Edited</p>
+                    <p class="text-2xl font-bold">{{ logs|selectattr('action_type', 'equalto', 'Edited')|list|length }}</p>
+                </div>
+                <div class="bg-blue-400 bg-opacity-30 rounded-full p-2">
+                    <i class="fas fa-edit text-lg"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-4 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-orange-100 text-sm font-medium">Delivered</p>
+                    <p class="text-2xl font-bold">{{ logs|selectattr('action_type', 'equalto', 'Marked Delivered')|list|length }}</p>
+                </div>
+                <div class="bg-orange-400 bg-opacity-30 rounded-full p-2">
+                    <i class="fas fa-check text-lg"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if logs %}
+        <!-- Desktop Table View -->
+        <div class="hidden lg:block bg-white shadow-sm rounded-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <h3 class="text-lg font-medium text-gray-900 flex items-center">
+                    <i class="fas fa-list mr-2"></i>
+                    Recent Activities (Last 50)
+                </h3>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Performed By</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for log in logs %}
+                        <tr class="hover:bg-gray-50 transition-colors duration-150">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <div class="flex items-center">
+                                    <i class="fas fa-clock text-gray-400 mr-2"></i>
+                                    {{ log.timestamp[:19].replace('T', ' ') }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if log.action_type == 'Created' %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-plus mr-1"></i>
+                                        {{ log.action_type }}
+                                    </span>
+                                {% elif log.action_type == 'Edited' %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        <i class="fas fa-edit mr-1"></i>
+                                        {{ log.action_type }}
+                                    </span>
+                                {% elif log.action_type == 'Marked Delivered' %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                        <i class="fas fa-check mr-1"></i>
+                                        Delivered
+                                    </span>
+                                {% elif log.action_type == 'Deleted' %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                        <i class="fas fa-trash mr-1"></i>
+                                        {{ log.action_type }}
+                                    </span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        <i class="fas fa-cog mr-1"></i>
+                                        {{ log.action_type }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                {% if log.order_id %}
+                                    <span class="bg-gray-100 px-2 py-1 rounded text-xs font-mono">{{ log.order_id }}</span>
+                                {% else %}
+                                    <span class="text-gray-400">-</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <div class="flex items-center">
+                                    <i class="fas fa-user text-gray-400 mr-2"></i>
+                                    {{ log.performed_by }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-500 max-w-xs">
+                                <div class="truncate" title="{{ log.details }}">
+                                    {{ log.details }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div class="lg:hidden space-y-4">
+            {% for log in logs %}
+            <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        {% if log.action_type == 'Created' %}
+                            <div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                <i class="fas fa-plus text-green-600 text-sm"></i>
+                            </div>
+                        {% elif log.action_type == 'Edited' %}
+                            <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                <i class="fas fa-edit text-blue-600 text-sm"></i>
+                            </div>
+                        {% elif log.action_type == 'Marked Delivered' %}
+                            <div class="h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+                                <i class="fas fa-check text-orange-600 text-sm"></i>
+                            </div>
+                        {% elif log.action_type == 'Deleted' %}
+                            <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                                <i class="fas fa-trash text-red-600 text-sm"></i>
+                            </div>
+                        {% else %}
+                            <div class="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center mr-3">
+                                <i class="fas fa-cog text-gray-600 text-sm"></i>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-900">{{ log.action_type }}</h3>
+                            <p class="text-xs text-gray-500">{{ log.timestamp[:19].replace('T', ' ') }}</p>
+                        </div>
+                    </div>
+                    {% if log.order_id %}
+                        <span class="bg-gray-100 px-2 py-1 rounded text-xs font-mono">{{ log.order_id }}</span>
+                    {% endif %}
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-500">Performed by:</span>
+                        <span class="text-sm font-medium">{{ log.performed_by }}</span>
+                    </div>
+                    {% if log.details %}
+                    <div class="text-sm text-gray-600">
+                        <strong>Details:</strong> {{ log.details }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- Empty State -->
+        <div class="text-center py-12">
+            <div class="mx-auto h-24 w-24 text-gray-400 mb-4">
+                <i class="fas fa-history text-6xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">No activity logs yet</h3>
+            <p class="text-gray-500 mb-6">Activity logs will appear here as you use the system.</p>
+            <a href="{{ url_for('add_order') }}" 
+               class="inline-flex items-center px-4 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors duration-200">
+                <i class="fas fa-plus mr-2"></i>
+                Create Your First Order
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
